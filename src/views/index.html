@@ -1,43 +1,43 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="utf-8">
+<html>
+<head lang="en">
+	<meta charset="UTF-8">
 	<meta name="viewport"    content="width=device-width, initial-scale=1.0">
-	<meta name="description" content="">
-	<meta name="author"      content="Sergey Pozhilov (GetTemplate.com)">
-	
-	<title>Progressus - Free business bootstrap template by GetTemplate</title>
 
-	<link rel="shortcut icon" href="../assets/images/gt_favicon.png">
+	<link rel="shortcut icon" href="/images/gt_favicon.png">
 	
 	<link rel="stylesheet" media="screen" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
-	<link rel="stylesheet" href="../assets/css/bootstrap.min.css">
-	<link rel="stylesheet" href="../assets/css/font-awesome.min.css">
+	<link rel="stylesheet" href="/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/css/font-awesome.min.css">
 
 	<!-- Custom styles for our template -->
-	<link rel="stylesheet" href="../assets/css/bootstrap-theme.css" media="screen" >
-	<link rel="stylesheet" href="../assets/css/main.css">
+	<link rel="stylesheet" href="/css/bootstrap-theme.css" media="screen" >
+	<link rel="stylesheet" href="/css/main.css">
 
 
-	<script type='text/javascript' src='../Scripts/Libs/knockout-3.2.0.js'></script>
+	<script type='text/javascript' src='javascripts/Libs/knockout-3.2.0.js'></script>
 
-
-
-	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-	<!--[if lt IE 9]>
-	<script src="../assets/js/html5shiv.js"></script>
-	<script src="../assets/js/respond.min.js"></script>
-	<![endif]-->
+	<script>
+		window.ViewModels = {};
+	</script>
+	<script src="javascripts/Libs/jquery-2.1.1.js"></script>
+	<script src="javascripts/Libs/knockout-3.2.0.js"></script>
+	<script src="http://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
+	<script src="javascripts/MapPlugin.js"></script>
+	<script src="javascripts/ViewModels/MapViewModel.js"></script>
+	<script src="javascripts/ViewModels/ParkingViewModel.js"></script>
+	<script src="javascripts/ViewModels/AuthorizationViewModel.js"></script>
+	<script src="javascripts/ViewModels/mainViewModel.js"></script>
+	<title></title>
 </head>
-
-<body class="home">
-	<!-- Fixed navbar -->
+<body class ="home">
+<!-- Fixed navbar -->
 	<div class="navbar navbar-inverse navbar-fixed-top headroom" >
 		<div class="container">
 			<div class="navbar-header">
 				<!-- Button for smallest screens -->
 				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"><span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
-				<a class="navbar-brand" href="index.html"><img src="../assets/images/logo.png" alt="Progressus HTML5 template"></a>
+				<a class="navbar-brand" href="index.html"><img src="/images/logo.png" alt="Progressus HTML5 template"></a>
 			</div>
 			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav pull-right">
@@ -51,7 +51,10 @@
 						</ul>
 					</li>
 					<li><a href="contact.html">Contact</a></li>
-					<li><a class="btn" href="signin.html">SIGN IN / SIGN UP</a></li>
+					<!-- ko with: AuthorizationViewModel -->
+					<li><a data-bind="click: ShowForm" class="btn">SIGN IN / SIGN UP</a></li>
+					<!-- /ko -->
+
 				</ul>
 			</div><!--/.nav-collapse -->
 		</div>
@@ -69,7 +72,9 @@
 	</header>
 	<!-- /Header -->
 
-	
+<div id="map" style="width: 600px; height: 400px"></div>
+
+
 	<!-- Social links. @TODO: replace by link/instructions in template -->
 	<section id="social">
 		<div class="container">
@@ -87,7 +92,9 @@
 	</section>
 	<!-- /social links -->
 
+<!-- ko if: AuthorizationViewModel.isAuthorizationViewModelEnabled -->
 <div data-bind="template: { name: 'SignIn'}"></div>
+<!-- /ko -->
 
 
 	<footer id="footer" class="top-space">
@@ -159,20 +166,10 @@
 			</div>
 		</div>
 
-	</footer>	
-		
+	</footer>
 
-
-
-
-	<!-- JavaScript libs are placed at the end of the document so the pages load faster -->
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+!-- JavaScript libs are placed at the end of the document so the pages load faster -->
 	<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-	<script src="../assets/js/headroom.min.js"></script>
-	<script src="../assets/js/jQuery.headroom.min.js"></script>
-	<script src="../assets/js/template.js"></script>
-
-
 
 
 	<script type="text/html" id="SignIn">
@@ -232,14 +229,7 @@
 		</div>	
 		<!-- /container -->
 	</script>
-		<script type="text/javascript">
-     function MyViewModel() {
-     }
-     ko.applyBindings(new MyViewModel());
-	</script>
-
-
-
+<script src="javascripts/index.js"></script>
 
 </body>
 </html>

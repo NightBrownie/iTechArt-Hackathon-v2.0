@@ -36,6 +36,8 @@ router.post('/login', function(req, res, next) {
 
         if (!user.validPassword(password)) return res.send(401);
 
+        req.session.currentUser = {username: username};
+
         res.end();
     });
 });
@@ -60,9 +62,54 @@ router.post('/register', function(req, res, next) {
         newUser.save(function(err) {
             if (err) throw err;
 
+            req.session.currentUser = {username: username};
+
             res.end();
         });
     });
 });
+
+router.post('/logout', function(req, res, next) {
+    if (!req.session.currentUser) {
+        return res.send(401);
+    }
+
+    req.session.currentUser = undefined;
+    res.end();
+});
+
+router.post('/usernameallowed', function(req, res) {
+    var username = req.body.value || '';
+
+    if (username === '') return res.send(400);
+
+    User.findOne({'local.username': username}, function(err, user) {
+        if (err) return res.send(500);
+
+        if (!user)
+            return res.end();
+        else
+            return res.send(400);
+    });
+});
+
+router.get('/', function(req, res) {
+    var username = req.query.username;
+
+    if (!username && req.session.currentUser) {
+        username = req.session.currentUser.username;
+    }
+
+    User.findOne({'local.username': username}, {username: 'local.username'}, function(err, user) {
+        if (err) return res.send(500);
+
+        if (!user) return res.send(404);
+
+        res.json({
+            username: user._doc.username
+        });
+    });
+});
+
 
 module.exports = router;
