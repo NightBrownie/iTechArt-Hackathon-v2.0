@@ -3,5 +3,9 @@ To run the project execute following commands:
     node ./src/bin/www
 
 API:
-    /api/user/login {username: [String], password: [String]}
-    /api/user/register {username: [String], password: [String]}
+
+POST    /api/user/login {username: [String], password: [String]}
+POST    /api/user/register {username: [String], password: [String]}
+POST    /api/user/logout
+POST    /api/user/usernameallowed {username: [String]}
+GET    /api/user/ {username: [String]}
