@@ -21,7 +21,7 @@
 
         var self = {};
 
-        self.addPlacemark = function(width, length, hintContent, balloonContent, url) {
+        self.addPlacemark = function(width, length, hintContent, balloonContent, url, freeCallback, busyCallback) {
 
             var newPlacemark = new ymaps.Placemark([width, length], {
                 hintContent: balloonContent
@@ -31,8 +31,8 @@
                 iconImageOffset: [-15, -15]
             });
             newPlacemark.events.add('click', function (e) {
-                if ($('#menu').css('display') == 'block') {
-                    $('#menu').remove();
+                if ($('#placemarker-menu').css('display') == 'block') {
+                    $('#placemarker-menu').remove();
                 } else {
                     // HTML-содержимое контекстного меню.
                     var menuContent =
@@ -46,11 +46,22 @@
 
                     // Размещаем контекстное меню на странице
                     $('body').append(menuContent);
-
+                    var coords = e.get('position');
                     // Задаем позицию меню.
                     $('#placemarker-menu').css({
-                        left: e.get('position')[0],
-                        top: e.get('position')[1] - 82
+                        left: coords[0],
+                        top: coords[1] - 82
+                    });
+                    var $menuButtons = $('#placemarker-menu button');
+
+                    if(freeCallback)
+                    $menuButtons[0].one(freeCallback.apply);
+                    if(busyCallback)
+                    $menuButtons[1].one(busyCallback);
+                    $menuButtons.one(function() {
+                        if ($('#placemarker-menu').css('display') == 'block') {
+                            $('#placemarker-menu').remove();
+                        }
                     });
                 }
             });
@@ -63,10 +74,6 @@
             getCoordsCallback = callback;
         };
 
-        function initCallback(){
-            for(var i = 0; i<5; i++)
-            window.YandexMap.addPlacemark('53.88' + (i + 3) + '5' + '5'.toString(), 27.5445, i, 'Занято: '+ (i+1).toString() + i.toString() +':' + i.toString() + (i+1).toString())
-        }
 
         function init(){
             myMap = new ymaps.Map("map", {
@@ -83,7 +90,6 @@
                     getCoordsCallback(coords);
                 }
             });
-            initCallback();
         }
 
         function getDefaults() {
