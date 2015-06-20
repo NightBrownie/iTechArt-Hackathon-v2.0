@@ -20,11 +20,9 @@
 	<script>
 		window.ViewModels = {};
 	</script>
-	<script src="Scripts/Libs/jquery-2.1.1.js"></script>
+	<script src="../src/Scripts/Libs/jquery-2.1.1.js"></script>
 	<script src="../src/Scripts/Libs/knockout-3.2.0.js"></script>
 	<script src="http://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
-	<script src="Scripts/MapPlugin.js"></script>
-	<script src="Scripts/ViewModels/mainViewModel.js"></script>
 	<script src="../src/Scripts/MapPlugin.js"></script>
 	<script src="../src/Scripts/ViewModels/MapViewModel.js"></script>
 	<script src="../src/Scripts/ViewModels/ParkingViewModel.js"></script>
@@ -70,7 +68,9 @@
 	</header>
 	<!-- /Header -->
 
-	
+<div id="map" style="width: 600px; height: 400px"></div>
+
+
 	<!-- Social links. @TODO: replace by link/instructions in template -->
 	<section id="social">
 		<div class="container">
@@ -160,17 +160,10 @@
 			</div>
 		</div>
 
-	</footer>	
-
-<div id="map" style="width: 600px; height: 400px"></div>
-
-<script src="Scripts/index.js"></script>
+	</footer>
 
 !-- JavaScript libs are placed at the end of the document so the pages load faster -->
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 	<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-
-
 
 
 	<script type="text/html" id="SignIn">
@@ -230,10 +223,11 @@
 		</div>	
 		<!-- /container -->
 	</script>
-		<script type="text/javascript">
-     function MyViewModel() {
-     }
-     ko.applyBindings(new MyViewModel());
-	</script>
+<script src="../src/Scripts/index.js"></script>
+<script type="text/javascript">
+	function MyViewModel() {
+	}
+	ko.applyBindings(new MyViewModel());
+</script>
 </body>
 </html>
