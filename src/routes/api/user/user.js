@@ -1,6 +1,7 @@
 var express = require('express');
 var User = require('../../../models/user.js');
 var logger = require('../../../service/logging/logger');
+var auth = require('../../../service/authentication/auth');
 
 var router = express.Router();
 
@@ -16,7 +17,7 @@ var mockStorage = {
     users: []
 };
 
-router.post('/login', function(req, res, next) {
+router.post('/login', auth(false), function(req, res, next) {
     /* expected input: {
         login: [String],
         password: [String]
@@ -42,7 +43,7 @@ router.post('/login', function(req, res, next) {
     });
 });
 
-router.post('/register', function(req, res, next) {
+router.post('/register', auth(false), function(req, res, next) {
     var username = req.body.username || '';
     var password = req.body.password || '';
 
@@ -69,7 +70,7 @@ router.post('/register', function(req, res, next) {
     });
 });
 
-router.post('/logout', function(req, res, next) {
+router.post('/logout', auth(true), function(req, res, next) {
     if (!req.session.currentUser) {
         return res.send(401);
     }
@@ -78,7 +79,7 @@ router.post('/logout', function(req, res, next) {
     res.end();
 });
 
-router.post('/usernameallowed', function(req, res) {
+router.post('/usernameallowed', auth(false), function(req, res) {
     var username = req.body.value || '';
 
     if (username === '') return res.send(400);
@@ -93,21 +94,27 @@ router.post('/usernameallowed', function(req, res) {
     });
 });
 
-router.get('/', function(req, res) {
-    var username = req.query.username;
+router.get('/', auth(true), function(req, res) {
+    var usernames = req.query.username;
 
-    if (!username && req.session.currentUser) {
-        username = req.session.currentUser.username;
+    if (!usernames && req.session.currentUser) {
+        usernames = [req.session.currentUser.username];
     }
 
-    User.findOne({'local.username': username}, function(err, user) {
+    if (!(usernames instanceof Array)) {
+        usernames = [usernames];
+    }
+
+    User.find({'local.username': {'$in': usernames}}, function(err, users) {
         if (err) return res.send(500);
 
-        if (!user) return res.send(404);
+        if (!users || !users.length) return res.send(404);
 
-        res.json({
-            username: user._doc.local.username
-        });
+        res.json(users.map(function(user) {
+            return {
+                username: user._doc.local.username
+            };
+        }));
     });
 });
 
