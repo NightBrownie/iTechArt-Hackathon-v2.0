@@ -2,27 +2,22 @@
     'use strict';
 
     window.YandexMap = function () {
-        ymaps.ready(init);
-        var myMap;
 
-        var self = {};
+        var LOCALSTORAGE_NAMES = {
+            DEFAULTS: "ParkingYandexMapDefaults"
+        };
 
         var defaults = {
             center: [53.88855, 27.5445],
             zoom: 15
         };
 
-        self.getDefaults = function () {
-            $.ajax({
-                dataType: "json",
-                url: url,
-                success: function (data) {
-                    data = JSON.parse(data);
-                    defaults.center = data.center;
-                    defaults.zoom = data.zoom;
-                }
-            });
-        };
+        loadDefaults();
+
+        ymaps.ready(init);
+        var myMap;
+
+        var self = {};
 
         self.addPlacemark = function(width, length, hintContent, balloonContent) {
             var newPlacemark = new ymaps.Placemark([width, length], {
@@ -39,6 +34,44 @@
                 zoom: defaults.zoom
             });
         }
+
+        function getDefaults() {
+            $.ajax({
+                dataType: 'json',
+                url: 'http://google.com',
+                success: function (data) {
+                    var data = {
+                        center: [53.88855, 27.5445],
+                        zoom: 15
+                    };
+/*                    data = JSON.parse(data);*/
+                    defaults.center = data.center;
+                    defaults.zoom = data.zoom;
+                }
+            });
+        }
+
+        function loadDefaults() {
+            var defaultsFromJson = localStorage.getItem(LOCALSTORAGE_NAMES.DEFAULTS);
+            defaultsFromJson = JSON.parse(defaultsFromJson) || null;
+            if(defaultsFromJson == null) {
+                getDefaults();
+                addDefaultsToLocalStorage();
+            }
+            else {
+                defaults.center = defaultsFromJson.center;
+                defaults.zoom   = defaultsFromJson.zoom;
+            }
+        }
+
+        function addDefaultsToLocalStorage() {
+            var defaultsToJson = {};
+            defaultsToJson.center =  defaults.center;
+            defaultsToJson.zoom = defaults.zoom;
+
+                var defaultsJsonData = JSON.stringify(defaultsToJson);
+                localStorage.setItem(LOCALSTORAGE_NAMES.DEFAULTS, defaultsJsonData);
+            }
 
         return self;
     }();
