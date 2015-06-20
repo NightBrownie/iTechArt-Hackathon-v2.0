@@ -24,20 +24,20 @@
             });
         };
 
-        function init(){
-            myMap = new ymaps.Map("map", {
-                center: defaults.center,
-                zoom: defaults.zoom
-            });
-        }
-
-        function addPlacemark(width, length, hintContent, balloonContent) {
+        self.addPlacemark = function(width, length, hintContent, balloonContent) {
             var newPlacemark = new ymaps.Placemark([width, length], {
                 hintContent: hintContent,
                 balloonContent: balloonContent
             });
 
             myMap.geoObjects.add(newPlacemark);
+        };
+
+        function init(){
+            myMap = new ymaps.Map("map", {
+                center: defaults.center,
+                zoom: defaults.zoom
+            });
         }
 
         return self;
