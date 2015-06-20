@@ -12,6 +12,7 @@ mongoose.connect('mongodb://172.19.100.244/hackathon');
 
 var routes = require('./routes/index');
 var userApi = require('./routes/api/user/user');
+var placeApi = require('./routes/api/place/place');
 
 var app = express();
 
@@ -38,6 +39,7 @@ app.use(session({
 
 app.use('/', routes);
 app.use('/api/user/', userApi);
+app.use('/api/place/', placeApi);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
