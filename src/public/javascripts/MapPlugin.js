@@ -93,13 +93,11 @@
         }
 
         function getMenuContent(balloonContent) {
-            return '<div id="placemarker-menu">\
-                            <ul id="menu_list">\
+            return '<div id="placemarker-menu" class="btn-group-vertical" role="group">\
                             <span>' + balloonContent + '</span>\
-                                <button>make free</button>\
-                                <button>make busy</button>\
+                                <button class="btn btn-success">make free</button>\
+                                <button class="btn btn-danger">make busy</button>\
                             </ul>\
-                            <div class="triangle"</div>\
                         </div>';
         }
 
