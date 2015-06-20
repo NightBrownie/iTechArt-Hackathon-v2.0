@@ -28,10 +28,20 @@
             myMap.geoObjects.add(newPlacemark);
         };
 
+
         function init(){
             myMap = new ymaps.Map("map", {
                 center: defaults.center,
                 zoom: defaults.zoom
+            });
+            // Обработка события, возникающего при щелчке
+            // левой кнопкой мыши в любой точке карты.
+            // При возникновении такого события откроем балун.
+            myMap.events.add('click', function (e) {
+                    var coords = e.get('coordPosition');
+                    myMap.balloon.open(coords, {
+                        contentBody:'<p>position</p>'
+                    });
             });
         }
 
