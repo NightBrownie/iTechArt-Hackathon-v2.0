@@ -79,4 +79,20 @@ img.pull-left { margin-right: 10px; }
 		.footer2 p { margin: 0; }
 
 	.widget-simplenav { margin-left:-5px; }		
-	.widget-simplenav a{ margin:0 5px; }		
+	.widget-simplenav a{ margin:0 5px; }
+
+	#placemarker-menu{
+		position: absolute;
+		background-color: #ffffff;
+		margin:0;
+		padding:0;
+	}
+#placemarker-menu #menu_list {
+	margin:0;
+	padding: 3px;
+}
+
+#menu_list button {
+	display:block;
+	width: 100%;
+}
