@@ -23,6 +23,13 @@
             var newPlacemark = new ymaps.Placemark([width, length], {
                 hintContent: hintContent,
                 balloonContent: balloonContent
+            }, {
+
+                iconImageHref: 'http://trololo.sto47.net/trololo.jpg',
+
+                iconImageSize: [30, 30],
+
+                iconImageOffset: [-15, -15]
             });
 
             myMap.geoObjects.add(newPlacemark);
@@ -34,9 +41,7 @@
                 center: defaults.center,
                 zoom: defaults.zoom
             });
-            // Обработка события, возникающего при щелчке
-            // левой кнопкой мыши в любой точке карты.
-            // При возникновении такого события откроем балун.
+
             myMap.events.add('click', function (e) {
                     var coords = e.get('coordPosition');
                     myMap.balloon.open(coords, {
