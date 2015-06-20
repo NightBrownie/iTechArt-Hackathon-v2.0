@@ -43,7 +43,7 @@
                     };
                     *//*                    data = JSON.parse(data);*/
                     for(var i = 0; i<5; i++)
-                        self.Map.addPlacemark('53.88' + (i + 3) + '5' + '5'.toString(), 27.5445, i, 'Занято: '+ (i+1).toString() + i.toString() +':' + i.toString() + (i+1).toString()/*,  freeCallback, busyCallback*/);
+                        self.Map.addPlacemark('53.88' + (i + 3) + '5' + '5'.toString(), 27.5445, 'UNKNOW', 'UNKNOW', '/images/unknown.png');
 /*                }
             });*/
         }

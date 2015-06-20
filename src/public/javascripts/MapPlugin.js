@@ -56,9 +56,10 @@
 
                     $($menuButtons.get(0)).one('click', function () {
                         var newPlacemark = e.get('target');
-                        newPlacemark.properties.set('hintContent', 'free');
                         var date = new Date();
-                        baloonCont = 'FREE: ' + date.getHours() + ': ' + date.getMinutes();
+                        baloonCont = 'FREE: ' + date.getHours() + ':' + date.getMinutes();
+                        newPlacemark.properties.set('hintContent', baloonCont);
+
                         newPlacemark.options["_be"].iconImageHref = '/images/free.png';
 
                         myMap.geoObjects.remove(newPlacemark);
@@ -67,10 +68,11 @@
 
                     $($menuButtons.get(1)).one('click', function () {
                         var newPlacemark = e.get('target');
-                        newPlacemark.properties.set('hintContent', 'busy');
                         var date = new Date();
 
-                        baloonCont = 'BUSY: ' + date.getHours() + ': ' + date.getMinutes();
+                        baloonCont = 'BUSY: ' + date.getHours() + ':' + date.getMinutes();
+                        newPlacemark.properties.set('hintContent', baloonCont);
+
                         newPlacemark.options["_be"].iconImageHref = '/images/busy.png';
                         myMap.geoObjects.remove(newPlacemark);
                         myMap.geoObjects.add(newPlacemark);
