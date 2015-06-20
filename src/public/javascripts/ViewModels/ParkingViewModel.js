@@ -12,6 +12,7 @@
             self.Map.setGetCoordsCallback(addPlacemarkerCallback);
             self.isParkingEnabled(false);
             getPlaceMarks();
+
         };
 
         function addPlacemarkerCallback() {
@@ -38,18 +39,27 @@
                     };
                     *//*                    data = JSON.parse(data);*/
                     for(var i = 0; i<5; i++)
-                        self.Map.addPlacemark('53.88' + (i + 3) + '5' + '5'.toString(), 27.5445, i, 'Занято: '+ (i+1).toString() + i.toString() +':' + i.toString() + (i+1).toString(),
-                            freeCallback(), busyCallback());
+                        self.Map.addPlacemark('53.88' + (i + 3) + '5' + '5'.toString(), 27.5445, i, 'Занято: '+ (i+1).toString() + i.toString() +':' + i.toString() + (i+1).toString()/*,  freeCallback, busyCallback*/);
 /*                }
             });*/
         }
 
-        function freeCallback() {
-
+        function freeCallback(e) {
+return function() {
+    var coords = e.get('position');
+    addNewPlacemark(coords[0], coords[1], 'busy')
+}
         }
 
-        function busyCallback() {
+        function busyCallback(e) {
+            return function() {
+                var coords = e.get('position');
+                //addNewPlacemark(coords[0], coords[1], 'free')
+            }
+        }
 
+        function addNewPlacemark(c1, c2, type) {
+            self.Map.addPlacemark(c1, c2, type, type + ': ',  freeCallback(), busyCallback());
         }
 
         return self;

@@ -21,8 +21,8 @@
 
         var self = {};
 
-        self.addPlacemark = function(width, length, hintContent, balloonContent, url, freeCallback, busyCallback) {
-
+        self.addPlacemark = function(width, length, hintContent, balloonContent, url/*, freeCallback, busyCallback*/) {
+var baloonCont = '';
             var newPlacemark = new ymaps.Placemark([width, length], {
                 hintContent: balloonContent
             }, {
@@ -31,18 +31,14 @@
                 iconImageOffset: [-15, -15]
             });
             newPlacemark.events.add('click', function (e) {
+                e.stopPropagation();
+                var newPlacemark = e.get('target');
                 if ($('#placemarker-menu').css('display') == 'block') {
                     $('#placemarker-menu').remove();
                 } else {
                     // HTML-содержимое контекстного меню.
-                    var menuContent =
-                        '<div id="placemarker-menu">\
-                            <ul id="menu_list">\
-                            <span>' + balloonContent + '</span>\
-                                <button>make free</button>\
-                                <button>make busy</button>\
-                            </ul>\
-                        </div>';
+                    var menuContent = getMenuContent(baloonCont || newPlacemark.properties.get('balloonContent'));
+
 
                     // Размещаем контекстное меню на странице
                     $('body').append(menuContent);
@@ -52,13 +48,33 @@
                         left: coords[0],
                         top: coords[1] - 82
                     });
+
+                    coords = e.get('coordPosition');
                     var $menuButtons = $('#placemarker-menu button');
 
-                    if(freeCallback)
-                    $menuButtons[0].one(freeCallback.apply);
-                    if(busyCallback)
-                    $menuButtons[1].one(busyCallback);
-                    $menuButtons.one(function() {
+                    $($menuButtons.get(0)).one('click', function() {
+                        var newPlacemark = e.get('target');
+                        newPlacemark.properties.set('hintContent', 'free');
+                        var date = new Date();
+                        baloonCont = 'FREE: ' + date.getHours() + ': ' + date.getMinutes();
+                        newPlacemark.options["_be"].iconImageHref = '/images/free.png';
+
+                        myMap.geoObjects.remove(newPlacemark);
+                        myMap.geoObjects.add(newPlacemark);
+                    });
+
+                    $($menuButtons.get(1)).one('click',function() {
+                        var newPlacemark = e.get('target');
+                        newPlacemark.properties.set('hintContent', 'busy');
+                        var date = new Date();
+
+                        baloonCont = 'BUSY: ' + date.getHours() + ': ' + date.getMinutes();
+                        newPlacemark.options["_be"].iconImageHref = '/images/busy.png';
+
+                        myMap.geoObjects.remove(newPlacemark);
+                        myMap.geoObjects.add(newPlacemark);
+                    });
+                    $menuButtons.one('click',function() {
                         if ($('#placemarker-menu').css('display') == 'block') {
                             $('#placemarker-menu').remove();
                         }
@@ -70,6 +86,16 @@
         };
 
 
+        function getMenuContent(balloonContent){
+return '<div id="placemarker-menu">\
+                            <ul id="menu_list">\
+                            <span>' + balloonContent + '</span>\
+                                <button>make free</button>\
+                                <button>make busy</button>\
+                            </ul>\
+                        </div>';
+        }
+
         self.setGetCoordsCallback = function(callback){
             getCoordsCallback = callback;
         };
@@ -78,7 +104,14 @@
         function init(){
             myMap = new ymaps.Map("map", {
                 center: defaults.center,
-                zoom: defaults.zoom
+                zoom: defaults.zoom,
+                balloon: false
+            });
+
+            myMap.events.add('actionbegin', function() {
+                if ($('#placemarker-menu').css('display') == 'block') {
+                    $('#placemarker-menu').remove();
+                }
             });
 
             myMap.controls.add('smallZoomControl', { top: 5 });
