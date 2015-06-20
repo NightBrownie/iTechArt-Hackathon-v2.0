@@ -25,31 +25,33 @@ router.post('/login', function(req, res, next) {
     var username = req.body.username || '';
     var password = req.body.password || '';
 
-    if (username === '' || password === '' || email === '') {
-        return res.end(400);
+    if (username === '' || password === '') {
+        return res.send(400);
     }
 
-    User.findOne({'local.username', username}, function(err, user) {
-        if (err) res.end(400);
+    User.findOne({'local.username': username}, function(err, user) {
+        if (err) return res.send(400);
 
-        if (!user) res.end(401);
+        if (!user) return res.send(401);
+
+        if (!user.validPassword(password)) return res.send(401);
+
+        res.end();
     });
-
-    res.end();
 });
 
 router.post('/register', function(req, res, next) {
     var username = req.body.username || '';
     var password = req.body.password || '';
 
-    if (username === '' || password === '' || email === '') {
-        return res.end(400);
+    if (username === '' || password === '') {
+        return res.send(400);
     }
 
     User.findOne({ 'local.username': username}, function(err, user) {
-        if (err) return res.end(400);
+        if (err) return res.send(400);
 
-        if (user) return res.end(401);
+        if (user) return res.send(401);
 
         var newUser = new User();
         newUser.local.username = username;
