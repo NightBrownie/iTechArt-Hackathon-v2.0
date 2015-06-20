@@ -1,8 +1,3 @@
-require(['./config'], function (config) {
-    'use strict';
-
-        require(['knockout','MapPlugin'],
-            function (ko, MapPlugin) {
-                var mapPlugin = MapPlugin;
-            });
-});
+(function() {
+    var ViewModel = new window.ViewModels.MainViewModel();
+})();

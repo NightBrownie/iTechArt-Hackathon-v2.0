@@ -1,22 +1,22 @@
-require(['jquery', 'yandexMap'], function($, yandexMap){
+(function() {
+    'use strict';
 
-    var self = {};
-
-    self.YandexMap = function() {
-        var self = {};
-
+    window.YandexMap = function () {
+        ymaps.ready(init);
         var myMap;
+
+        var self = {};
 
         var defaults = {
             center: [53.88855, 27.5445],
             zoom: 15
         };
 
-        self.getDefaults = function() {
+        self.getDefaults = function () {
             $.ajax({
                 dataType: "json",
                 url: url,
-                success: function(data) {
+                success: function (data) {
                     data = JSON.parse(data);
                     defaults.center = data.center;
                     defaults.zoom = data.zoom;
@@ -24,12 +24,12 @@ require(['jquery', 'yandexMap'], function($, yandexMap){
             });
         };
 
-        self.init = function() {
-           myMap = new ymaps.Map("map", {
-               center: defaults.center,
-               zoom: defaults.zoom
-           });
-        };
+        function init(){
+            myMap = new ymaps.Map("map", {
+                center: defaults.center,
+                zoom: defaults.zoom
+            });
+        }
 
         function addPlacemark(width, length, hintContent, balloonContent) {
             var newPlacemark = new ymaps.Placemark([width, length], {
@@ -41,9 +41,5 @@ require(['jquery', 'yandexMap'], function($, yandexMap){
         }
 
         return self;
-    }();
-
-    ymaps.ready(self.YandexMap.init);
-
-    return self;
-});
+    };
+})();
