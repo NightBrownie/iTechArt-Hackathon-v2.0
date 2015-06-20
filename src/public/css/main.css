@@ -96,3 +96,7 @@ img.pull-left { margin-right: 10px; }
 	display:block;
 	width: 100%;
 }
+
+.ymaps-b-balloon .ymaps-i-custom-scroll {
+	display: none !important;
+}
