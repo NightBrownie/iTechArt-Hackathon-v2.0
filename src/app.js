@@ -8,7 +8,9 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var session = require('express-session');
 
-mongoose.connect('mongodb://172.19.100.244/hackathon');
+var mongoLink = process.env.mongoLink || 'mongodb://172.19.100.244/hackathon';
+
+mongoose.connect(mongoLink);
 
 var routes = require('./routes/index');
 var userApi = require('./routes/api/user/user');
