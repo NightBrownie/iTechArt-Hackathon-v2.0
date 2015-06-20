@@ -12,7 +12,11 @@
             self.Map.setGetCoordsCallback(addPlacemarkerCallback);
             self.isParkingEnabled(false);
             getPlaceMarks();
-
+        };
+        self.TakePlace = function()
+        {
+            var location = self.Map.getGeolocation();
+            self.Map.addPlacemark(location.latitude, location.longitude, 'You', 'You', '/images/current.png');
         };
 
         function addPlacemarkerCallback() {

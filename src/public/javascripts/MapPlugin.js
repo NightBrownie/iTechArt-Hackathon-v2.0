@@ -17,12 +17,14 @@
         loadDefaults();
 
         ymaps.ready(init);
+
         var myMap;
 
         var self = {};
 
-        self.addPlacemark = function(width, length, hintContent, balloonContent, url/*, freeCallback, busyCallback*/) {
-var baloonCont = '';
+        self.addPlacemark = function (width, length, hintContent, balloonContent, url/*, freeCallback, busyCallback*/) {
+
+            var baloonCont = '';
             var newPlacemark = new ymaps.Placemark([width, length], {
                 hintContent: balloonContent
             }, {
@@ -37,7 +39,7 @@ var baloonCont = '';
                     $('#placemarker-menu').remove();
                 } else {
                     // HTML-содержимое контекстного меню.
-                    var menuContent = getMenuContent(baloonCont || newPlacemark.properties.get('balloonContent'));
+                    var menuContent = getMenuContent(baloonCont || balloonContent);
 
 
                     // Размещаем контекстное меню на странице
@@ -46,13 +48,13 @@ var baloonCont = '';
                     // Задаем позицию меню.
                     $('#placemarker-menu').css({
                         left: coords[0],
-                        top: coords[1] - 82
+                        top: coords[1] - 100
                     });
 
                     coords = e.get('coordPosition');
                     var $menuButtons = $('#placemarker-menu button');
 
-                    $($menuButtons.get(0)).one('click', function() {
+                    $($menuButtons.get(0)).one('click', function () {
                         var newPlacemark = e.get('target');
                         newPlacemark.properties.set('hintContent', 'free');
                         var date = new Date();
@@ -63,18 +65,17 @@ var baloonCont = '';
                         myMap.geoObjects.add(newPlacemark);
                     });
 
-                    $($menuButtons.get(1)).one('click',function() {
+                    $($menuButtons.get(1)).one('click', function () {
                         var newPlacemark = e.get('target');
                         newPlacemark.properties.set('hintContent', 'busy');
                         var date = new Date();
 
                         baloonCont = 'BUSY: ' + date.getHours() + ': ' + date.getMinutes();
                         newPlacemark.options["_be"].iconImageHref = '/images/busy.png';
-
                         myMap.geoObjects.remove(newPlacemark);
                         myMap.geoObjects.add(newPlacemark);
                     });
-                    $menuButtons.one('click',function() {
+                    $menuButtons.one('click', function () {
                         if ($('#placemarker-menu').css('display') == 'block') {
                             $('#placemarker-menu').remove();
                         }
@@ -85,41 +86,45 @@ var baloonCont = '';
             myMap.geoObjects.add(newPlacemark);
         };
 
+        self.getGeolocation = function () {
+            return ymaps.geolocation;
+        }
 
-        function getMenuContent(balloonContent){
-return '<div id="placemarker-menu">\
+        function getMenuContent(balloonContent) {
+            return '<div id="placemarker-menu">\
                             <ul id="menu_list">\
                             <span>' + balloonContent + '</span>\
                                 <button>make free</button>\
                                 <button>make busy</button>\
                             </ul>\
+                            <div class="triangle"</div>\
                         </div>';
         }
 
-        self.setGetCoordsCallback = function(callback){
+        self.setGetCoordsCallback = function (callback) {
             getCoordsCallback = callback;
         };
 
 
-        function init(){
+        function init() {
             myMap = new ymaps.Map("map", {
                 center: defaults.center,
                 zoom: defaults.zoom,
                 balloon: false
             });
 
-            myMap.events.add('actionbegin', function() {
+            myMap.events.add('actionbegin', function () {
                 if ($('#placemarker-menu').css('display') == 'block') {
                     $('#placemarker-menu').remove();
                 }
             });
 
-            myMap.controls.add('smallZoomControl', { top: 5 });
+            myMap.controls.add('smallZoomControl', {top: 5});
 
             myMap.events.add('click', function (e) {
-                    var coords = e.get('coordPosition');
+                var coords = e.get('coordPosition');
 
-                if(getCoordsCallback){
+                if (getCoordsCallback) {
                     getCoordsCallback(coords);
                 }
             });
@@ -134,7 +139,7 @@ return '<div id="placemarker-menu">\
                         center: [53.88855, 27.5445],
                         zoom: 15
                     };
-/*                    data = JSON.parse(data);*/
+                    /*                    data = JSON.parse(data);*/
                     defaults.center = data.center;
                     defaults.zoom = data.zoom;
                 }
@@ -144,24 +149,24 @@ return '<div id="placemarker-menu">\
         function loadDefaults() {
             var defaultsFromJson = localStorage.getItem(LOCALSTORAGE_NAMES.DEFAULTS);
             defaultsFromJson = JSON.parse(defaultsFromJson) || null;
-            if(defaultsFromJson == null) {
+            if (defaultsFromJson == null) {
                 getDefaults();
                 addDefaultsToLocalStorage();
             }
             else {
                 defaults.center = defaultsFromJson.center;
-                defaults.zoom   = defaultsFromJson.zoom;
+                defaults.zoom = defaultsFromJson.zoom;
             }
         }
 
         function addDefaultsToLocalStorage() {
             var defaultsToJson = {};
-            defaultsToJson.center =  defaults.center;
+            defaultsToJson.center = defaults.center;
             defaultsToJson.zoom = defaults.zoom;
 
-                var defaultsJsonData = JSON.stringify(defaultsToJson);
-                localStorage.setItem(LOCALSTORAGE_NAMES.DEFAULTS, defaultsJsonData);
-            }
+            var defaultsJsonData = JSON.stringify(defaultsToJson);
+            localStorage.setItem(LOCALSTORAGE_NAMES.DEFAULTS, defaultsJsonData);
+        }
 
         return self;
     }();
