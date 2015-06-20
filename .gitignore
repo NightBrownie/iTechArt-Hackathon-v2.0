@@ -102,4 +102,4 @@ node_modules
 # Front-end gitignore part
 #-------------------------------
 
-/bower_components
+/src/bower_components
