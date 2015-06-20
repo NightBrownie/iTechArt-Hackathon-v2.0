@@ -34,7 +34,9 @@
             });
             newPlacemark.events.add('click', function (e) {
                 e.stopPropagation();
+
                 var newPlacemark = e.get('target');
+                
                 if ($('#placemarker-menu').css('display') == 'block') {
                     $('#placemarker-menu').remove();
                 } else {
