@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head lang="en">
 	<meta charset="UTF-8">
@@ -93,7 +93,8 @@
 	<!-- /social links -->
 
 <!-- ko if: AuthorizationViewModel.isAuthorizationViewModelEnabled -->
-<div data-bind="template: { name: 'SignIn'}"></div>
+    <div data-bind="template: { name: 'SignIn'}"></div>
+    <div data-bind="template: { name: 'SignUp'}"></div>
 <!-- /ko -->
 
 
@@ -172,63 +173,144 @@
 	<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
 
 
-	<script type="text/html" id="SignIn">
-	    <!-- container -->
-		<div class="container">
+    <script type="text/html" id="SignIn">
+        <!-- container -->
+        <!-- ko with: AuthorizationViewModel -->
 
-			<ol class="breadcrumb">
-				<li><a href="index.html">Home</a></li>
-				<li class="active">User access</li>
-			</ol>
+        <div class="container">
 
-			<div class="row">
+            <ol class="breadcrumb">
+                <li><a href="index.html">Home</a></li>
+                <li class="active">User access</li>
+            </ol>
+
+            <div class="row">
 				
-				<!-- Article main content -->
-				<article class="col-xs-12 maincontent">
-					<header class="page-header">
-						<h1 class="page-title">Sign in</h1>
-					</header>
+                <!-- Article main content -->
+                <article class="col-xs-12 maincontent">
+                    <header class="page-header">
+                        <h1 class="page-title">Sign in</h1>
+                    </header>
 					
-					<div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
-						<div class="panel panel-default">
-							<div class="panel-body">
-								<h3 class="thin text-center">Sign in to your account</h3>
-								<p class="text-center text-muted">Havent account? <a href="signup.html">Register</a></p>
-								<hr>
+                    <div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <h3 class="thin text-center">Sign in to your account</h3>
+                                <p class="text-center text-muted">Havent account? <a href="signup.html">Register</a></p>
+                                <hr>
 								
-								<form>
-									<div class="top-margin">
-										<label>Email <span class="text-danger">*</span></label>
-										<input type="text" class="form-control">
-									</div>
-									<div class="top-margin">
-										<label>Password <span class="text-danger">*</span></label>
-										<input type="password" class="form-control">
-									</div>
+                                <form>
+                                    <div class="top-margin">
+                                        <label>Email <span class="text-danger">*</span></label>
+                                        <input type="text" data-bind="value: userName" class="form-control">
+                                    </div>
+                                    <div class="top-margin">
+                                        <label>Password <span class="text-danger">*</span></label>
+                                        <input type="password" data-bind="value: password" class="form-control">
+                                    </div>
 
-									<hr>
+                                    <hr>
 
-									<div class="row">
-										<div class="col-lg-8">
-											<b><a href="">Forgot password?</a></b>
-										</div>
-										<div class="col-lg-4 text-right">
-											<button class="btn btn-action" type="submit">Sign in</button>
-										</div>
-									</div>
-								</form>
-							</div>
-						</div>
+                                    <div class="row">
+                                        <div class="col-lg-8">
+                                            <b><a href="">Forgot password?</a></b>
+                                        </div>
+                                        <div class="col-lg-4 text-right">
+                                            <button class="btn btn-action" data-bind="click: logIn">Sign in</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
 
-					</div>
+                    </div>
 					
-				</article>
-				<!-- /Article -->
+                </article>
+                <!-- /Article -->
 
-			</div>
-		</div>	
-		<!-- /container -->
-	</script>
+            </div>
+        </div>	
+        <!-- /container -->
+        <!-- /ko -->
+    </script>
+    <script type="text/html" id="SignUp">
+        <!-- container -->
+        <!-- ko with: AuthorizationViewModel -->
+
+        <!-- container -->
+        <div class="container">
+
+            <ol class="breadcrumb">
+                <li><a href="index.html">Home</a></li>
+                <li class="active">Registration</li>
+            </ol>
+
+            <div class="row">
+
+                <!-- Article main content -->
+                <article class="col-xs-12 maincontent">
+                    <header class="page-header">
+                        <h1 class="page-title">Registration</h1>
+                    </header>
+
+                    <div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <h3 class="thin text-center">Register a new account</h3>
+                                <p class="text-center text-muted">Lorem ipsum dolor sit amet, <a href="signin.html">Login</a> adipisicing elit. Quo nulla quibusdam cum doloremque incidunt nemo sunt a tenetur omnis odio. </p>
+                                <hr>
+
+                                <form>
+                                    <div class="top-margin">
+                                        <label>First Name</label>
+                                        <input type="text" class="form-control" data-bind="value: firstName">
+                                    </div>
+                                    <div class="top-margin">
+                                        <label>Last Name</label>
+                                        <input type="text" class="form-control" data-bind ="value: lastName">
+                                    </div>
+                                    <div class="top-margin">
+                                        <label>Email Address <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" data-bind="value: userName">
+                                    </div>
+
+                                    <div class="row top-margin">
+                                        <div class="col-sm-6">
+                                            <label>Password <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" data-bind="value: password">
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <label>Confirm Password <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" data-bind="value: confirmPassword">
+                                        </div>
+                                    </div>
+
+                                    <hr>
+
+                                    <div class="row">
+                                        <div class="col-lg-8">
+                                            <label class="checkbox">
+                                                <input type="checkbox">
+                                                I've read the <a href="page_terms.html">Terms and Conditions</a>
+                                            </label>
+                                        </div>
+                                        <div class="col-lg-4 text-right">
+                                            <button class="btn btn-action" data-bind="click: register">Register</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </article>
+                <!-- /Article -->
+
+            </div>
+        </div>	<!-- /container -->
+        <!-- /ko -->
+    </script>
 <script src="javascripts/index.js"></script>
 
 </body>
