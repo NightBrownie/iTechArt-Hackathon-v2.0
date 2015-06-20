@@ -9,6 +9,7 @@
 
         self.ParkingViewModel = new self.vm.ParkingViewModel();
 
+        self.AuthorizationViewModel = new self.vm.AuthorizationViewModel();
 
         return self;
     }

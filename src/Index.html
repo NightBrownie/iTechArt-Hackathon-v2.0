@@ -26,6 +26,7 @@
 	<script src="../src/Scripts/MapPlugin.js"></script>
 	<script src="../src/Scripts/ViewModels/MapViewModel.js"></script>
 	<script src="../src/Scripts/ViewModels/ParkingViewModel.js"></script>
+	<script src="../src/Scripts/ViewModels/AuthorizationViewModel.js"></script>
 	<script src="../src/Scripts/ViewModels/mainViewModel.js"></script>
 	<title></title>
 </head>
@@ -50,7 +51,10 @@
 						</ul>
 					</li>
 					<li><a href="contact.html">Contact</a></li>
-					<li><a class="btn" href="signin.html">SIGN IN / SIGN UP</a></li>
+					<!-- ko with: AuthorizationViewModel -->
+					<li><a data-bind="click: ShowForm" class="btn">SIGN IN / SIGN UP</a></li>
+					<!-- /ko -->
+
 				</ul>
 			</div><!--/.nav-collapse -->
 		</div>
@@ -88,7 +92,9 @@
 	</section>
 	<!-- /social links -->
 
+<!-- ko if: AuthorizationViewModel.isAuthorizationViewModelEnabled -->
 <div data-bind="template: { name: 'SignIn'}"></div>
+<!-- /ko -->
 
 
 	<footer id="footer" class="top-space">
@@ -224,10 +230,6 @@
 		<!-- /container -->
 	</script>
 <script src="../src/Scripts/index.js"></script>
-<script type="text/javascript">
-	function MyViewModel() {
-	}
-	ko.applyBindings(new MyViewModel());
-</script>
+
 </body>
 </html>
