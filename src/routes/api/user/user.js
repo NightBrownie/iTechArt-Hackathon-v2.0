@@ -100,13 +100,13 @@ router.get('/', function(req, res) {
         username = req.session.currentUser.username;
     }
 
-    User.findOne({'local.username': username}, {username: 'local.username'}, function(err, user) {
+    User.findOne({'local.username': username}, function(err, user) {
         if (err) return res.send(500);
 
         if (!user) return res.send(404);
 
         res.json({
-            username: user._doc.username
+            username: user._doc.local.username
         });
     });
 });
