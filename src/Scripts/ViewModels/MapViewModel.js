@@ -3,7 +3,7 @@
 
     function MapViewModel() {
         var self = {};
-        self.Map = window.YandexMap();
+        self.Map = window.YandexMap;
 
         self.isMapEnabled = ko.observable(false);
 

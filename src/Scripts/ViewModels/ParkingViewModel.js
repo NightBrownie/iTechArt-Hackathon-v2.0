@@ -1,9 +1,9 @@
 (function() {
     'use strict';
 
-    function ParkingViewModel(Map) {
+    function ParkingViewModel() {
         var self = {};
-        self.Map = Map;
+        self.Map = window.YandexMap;
 
         self.isParkingEnabled = ko.observable(false);
 

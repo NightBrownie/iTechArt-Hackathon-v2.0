@@ -7,7 +7,7 @@
 
         self.MapViewModel = new self.vm.MapViewModel();
 
-        self.ParkingViewModel = new self.vm.ParkingViewModel(self.MapViewModel);
+        self.ParkingViewModel = new self.vm.ParkingViewModel();
 
 
         return self;
