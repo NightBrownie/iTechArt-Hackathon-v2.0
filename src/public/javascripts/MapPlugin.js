@@ -23,15 +23,30 @@
             var newPlacemark = new ymaps.Placemark([width, length], {
                 hintContent: hintContent,
                 balloonContent: balloonContent
+            }, {
+
+                iconImageHref: 'http://trololo.sto47.net/trololo.jpg',
+
+                iconImageSize: [30, 30],
+
+                iconImageOffset: [-15, -15]
             });
 
             myMap.geoObjects.add(newPlacemark);
         };
 
+
         function init(){
             myMap = new ymaps.Map("map", {
                 center: defaults.center,
                 zoom: defaults.zoom
+            });
+
+            myMap.events.add('click', function (e) {
+                    var coords = e.get('coordPosition');
+                    myMap.balloon.open(coords, {
+                        contentBody:'<p>position</p>'
+                    });
             });
         }
 
