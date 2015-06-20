@@ -16,6 +16,15 @@
         self.TakePlace = function()
         {
             var location = self.Map.getGeolocation();
+            /*$.ajax({
+                dataType: 'json',
+                url: 'http://localhost:3000',
+                success: function (data) {
+                    var data = {
+                        center: [53.88855, 27.5445],
+                        zoom: 15
+                    };
+            self.Map.addPlacemark(location.latitude, location.longitude, 'You', 'You', '/images/current.png');}})*/
             self.Map.addPlacemark(location.latitude, location.longitude, 'You', 'You', '/images/current.png');
         };
 
