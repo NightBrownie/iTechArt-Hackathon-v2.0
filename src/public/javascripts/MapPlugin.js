@@ -154,7 +154,37 @@
                 }
             });
             myMap.geoObjects.add(newPlacemark);
+            if(hintContent === 'PACMAN')
+            PacmanMove(newPlacemark);
         };
+        var pacman;
+        function PacmanMove(newPlacemark){
+
+                pacman = newPlacemark;
+
+            var coords = pacman.geometry.getCoordinates();
+            setTimeout(RemovePacman,200);
+            function RemovePacman() {
+                myMap.geoObjects.remove(pacman);
+                coords[1] +=0.0005;
+                coords[1] +=0.0005;
+                pacman = AddPacman(coords[0],coords[1], '/images/pacman_gif_2.gif');
+                pacman();
+            }
+        }
+        function AddPacman(width, length, url) {
+            var newPlacemark = new ymaps.Placemark([width, length], {
+            }, {
+                iconImageHref: url,
+                iconImageSize: [35, 35],
+                iconImageOffset: [-15, -15]
+            });
+            return function() {
+                myMap.geoObjects.add(newPlacemark);
+                PacmanMove(newPlacemark);
+            }
+        }
+
 
         self.getGeolocation = function () {
             return ymaps.geolocation;
@@ -206,12 +236,15 @@
             myMap.events.add('click', function (e) {
                 var coords = e.get('coordPosition');
                 if(self.enabledTrack)
-                self.addPlacemark(coords[0],coords[1],'PACMAN','PACMAN','/images/pacman.png')
+                self.addPlacemark(coords[0],coords[1],'PACMAN','PACMAN','/images/pacman_gif_2.gif');
+                else {
+                    self.addPlacemark(coords[0],coords[1],'','','/images/busy.png');
+                }
             });
             myMap.events.add('tap', function (e) {
                 var coords = e.get('coordPosition');
                 if(self.enabledTrack)
-                    self.addPlacemark(coords[0],coords[1],'PACMAN','PACMAN','/images/pacman.png')
+                    self.addPlacemark(coords[0],coords[1],'PACMAN','PACMAN','/images/pacman_gif_2.gif')
             });
         }
 
