@@ -36,7 +36,6 @@
                 iconImageOffset: [-15, -15]
             });
             newPlacemark.events.add('click', function (e) {
-                e.stopPropagation();
 
                 var newPlacemark = e.get('target');
 
@@ -62,25 +61,29 @@
                     $($menuButtons.get(0)).one('click', function () {
                         var newPlacemark = e.get('target');
                         var date = new Date();
-                        baloonCont = 'FREE: ' + date.getHours() + ':' + date.getMinutes();
-                        newPlacemark.properties.set('hintContent', baloonCont);
+                        $.post('/api/place', {state: 'free', latitude: coords[0], longitude: coords[1], lastUpdated: date}, function (data) {
+                            baloonCont = 'FREE: ' + date.getHours() + ':' + date.getMinutes();
+                            newPlacemark.properties.set('hintContent', baloonCont);
 
-                        newPlacemark.options["_be"].iconImageHref = '/images/free.png';
+                            newPlacemark.options["_be"].iconImageHref = '/images/free.png';
 
-                        myMap.geoObjects.remove(newPlacemark);
-                        myMap.geoObjects.add(newPlacemark);
+                            myMap.geoObjects.remove(newPlacemark);
+                            myMap.geoObjects.add(newPlacemark);
+                        });
                     });
 
                     $($menuButtons.get(1)).one('click', function () {
                         var newPlacemark = e.get('target');
                         var date = new Date();
 
-                        baloonCont = 'BUSY: ' + date.getHours() + ':' + date.getMinutes();
-                        newPlacemark.properties.set('hintContent', baloonCont);
+                        $.post('/api/place', {state: 'busy', latitude: coords[0], longitude: coords[1], lastUpdated: date}, function (data) {
+                            baloonCont = 'BUSY: ' + date.getHours() + ':' + date.getMinutes();
+                            newPlacemark.properties.set('hintContent', baloonCont);
 
-                        newPlacemark.options["_be"].iconImageHref = '/images/busy.png';
-                        myMap.geoObjects.remove(newPlacemark);
-                        myMap.geoObjects.add(newPlacemark);
+                            newPlacemark.options["_be"].iconImageHref = '/images/busy.png';
+                            myMap.geoObjects.remove(newPlacemark);
+                            myMap.geoObjects.add(newPlacemark);
+                        });
                     });
                     $menuButtons.one('click', function () {
                         if ($('#placemarker-menu').css('display') == 'block') {
@@ -90,7 +93,6 @@
                 }
             });
             newPlacemark.events.add('tap', function (e) {
-                e.stopPropagation();
 
                 var newPlacemark = e.get('target');
 
@@ -113,30 +115,38 @@
                     coords = e.get('coordPosition');
                     var $menuButtons = $('#placemarker-menu button');
 
-                    $($menuButtons.get(0)).one('click', function () {
+                    $menuButtons.get(0).one('click', function () {
                         var newPlacemark = e.get('target');
                         var date = new Date();
-                        baloonCont = 'FREE: ' + date.getHours() + ':' + date.getMinutes();
-                        newPlacemark.properties.set('hintContent', baloonCont);
+                        $.post('/api/place', {state: 'free', latitude: coords[0], longitude: coords[1], lastUpdated: date}, function (data) {
+                            baloonCont = 'FREE: ' + date.getHours() + ':' + date.getMinutes();
+                            newPlacemark.properties.set('hintContent', baloonCont);
 
-                        newPlacemark.options["_be"].iconImageHref = '/images/free.png';
+                            newPlacemark.options["_be"].iconImageHref = '/images/free.png';
 
-                        myMap.geoObjects.remove(newPlacemark);
-                        myMap.geoObjects.add(newPlacemark);
+                            myMap.geoObjects.remove(newPlacemark);
+                            myMap.geoObjects.add(newPlacemark);
+                        });
                     });
 
-                    $($menuButtons.get(1)).one('click', function () {
+                    $menuButtons.get(1).one('click', function () {
                         var newPlacemark = e.get('target');
                         var date = new Date();
+                        $.post('/api/place', {state: 'busy', latitude: coords[0], longitude: coords[1], lastUpdated: date}, function (data) {
+                            baloonCont = 'BUSY: ' + date.getHours() + ':' + date.getMinutes();
+                            newPlacemark.properties.set('hintContent', baloonCont);
 
-                        baloonCont = 'BUSY: ' + date.getHours() + ':' + date.getMinutes();
-                        newPlacemark.properties.set('hintContent', baloonCont);
-
-                        newPlacemark.options["_be"].iconImageHref = '/images/busy.png';
-                        myMap.geoObjects.remove(newPlacemark);
-                        myMap.geoObjects.add(newPlacemark);
+                            newPlacemark.options["_be"].iconImageHref = '/images/busy.png';
+                            myMap.geoObjects.remove(newPlacemark);
+                            myMap.geoObjects.add(newPlacemark);
+                        });
                     });
                     $menuButtons.one('click', function () {
+                        if ($('#placemarker-menu').css('display') == 'block') {
+                            $('#placemarker-menu').remove();
+                        }
+                    });
+                    $menuButtons.one('tap', function () {
                         if ($('#placemarker-menu').css('display') == 'block') {
                             $('#placemarker-menu').remove();
                         }

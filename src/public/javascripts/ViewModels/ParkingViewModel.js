@@ -105,7 +105,7 @@
             var location = self.Map.getGeolocation();
             var date = new Date();
 
-            $.post('/api/place', {state: 'just_reserver', latitude: location.latitude, longitude: location.longitude, lastUpdated: (date).toJSON()}, function (data) {
+            $.post('/api/place', {state: 'just_reserved', latitude: location.latitude, longitude: location.longitude, lastUpdated: (date).toJSON()}, function (data) {
                 self.Map.addPlacemark(location.latitude, location.longitude, 'Your Place', 'Your Place', '/images/busy.png');
             });
         };
@@ -136,7 +136,7 @@
             $.ajax({
                 url: "/api/place",
                 type: 'GET',
-                data: {latitude: location.latitude, longitude: location.longitude, radius: 500},
+                data: {latitude: location.latitude, longitude: location.longitude, radius: 3000},
                 context: document.body
             }).done(function (data) {
                 /*if (data.length <= 1) data = d;*/
