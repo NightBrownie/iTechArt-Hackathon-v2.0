@@ -3,6 +3,9 @@ var router = express.Router();
 var Place = require('../../../models/place');
 var auth = require('../../../service/authentication/auth');
 
+var carPlaceRadius = 10.0;
+var existingCarPlacesAreaSearchRadius = Math.sqrt(carPlaceRadius);
+
 router.get('/', auth(true), function(req, res, next) {
     var longitude = req.query.longitude;
     var latitude = req.query.latitude;
@@ -55,26 +58,88 @@ router.post('/', auth(true), function(req, res, next) {
         state = 'busy';
     }
 
-    if (!latitude || !longitude || !state || !state || !lastUpdated) {
+    if (!latitude || !longitude || !state || !lastUpdated) {
         return res.send(400);
     }
 
-    Place.remove({username: username}, function(err) {
-        if (err) return res.send(500);
+    Place.remove({
+            'location.coordinates': {
+                $near: {
+                    $geometry: {
+                        type: "Point",
+                        coordinates: [longitude, latitude] },
+                        $maxDistance : existingCarPlacesAreaSearchRadius
+                    }
+                }
+            },
+            function(err) {
+                if (err) return res.send(500);
 
-        var place = new Place();
-        place.username = username;
-        place.state = state;
-        place.lastUpdated = lastUpdated;
+                Place.remove({username: username},
+                    function(err) {
+                        if (err) return res.send(500);
 
-        place.location = {coordinates: [longitude, latitude]};
+                        var place = new Place();
+                        place.username = username;
+                        place.state = state;
+                        place.lastUpdated = lastUpdated;
 
-        place.save(function(err) {
+                        place.location = {coordinates: [longitude, latitude]};
+
+                        place.save(function(err) {
+                            if (err) return res.send(500);
+
+                            res.end();
+                        });
+                    });
+            });
+
+    
+});
+
+router.get('/nearestfree', function(req, res, next) {
+    var latitude = req.query.latitude;
+    var longitude = req.query.longitude;
+
+    if (!latitude || !longitude) {
+        return res.send(400);
+    }
+
+    criteria = {'$or': [{
+        'location.coordinates': {
+            $near: {
+                $geometry: {
+                    type: "Point",
+                    coordinates: [longitude, latitude] }
+                }
+            }
+        }]};
+
+    Place.find(criteria).exec(function(err, place) {
             if (err) return res.send(500);
 
-            res.end();
+            place = place || {};
+
+            place = place.filter(function(place) {
+                return place._doc.state === 'free';
+            });
+
+            if (place.length) {
+                place = place[0];
+
+                place = {
+                    longitude: place._doc.location.coordinates[0],
+                    latitude: place._doc.location.coordinates[1],
+                    lastUpdated: place._doc.lastUpdated,
+                    state: place._doc.state,
+                    username: place._doc.username
+                };
+            } else {
+                place = {};
+            }
+
+            res.json(place);
         });
-    });
 });
 
 module.exports = router;

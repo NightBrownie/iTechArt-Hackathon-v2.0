@@ -21,3 +21,4 @@ POST    /api/place {state: 'just_reserver', latitude: -55.02, longitude: 43.2, l
         'just_reserved' - used is only when sent to server to show that current user is just reserved place
     ]
 GET    /api/place    ?latitude=-55.02&longitude=43.2&radius=1
+GET    /api/place/nearestfree    ?latitude=-55.02,longitude=43.2
