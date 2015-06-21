@@ -16,15 +16,30 @@
 
         self.getMyCoordinates = function () {
             var location = self.Map.getGeolocation();
-            //self.Map.setCenter(location);
+            self.Map.setCenter(location);
             //self.Map.renderCircle(location);
             self.Map.addPlacemark(location.latitude, location.longitude, 'You', 'You', '/images/current.png');
         };
 
         self.TakePlace = function () {
             var location = self.Map.getGeolocation();
-            $.post('/api/place', function (data) {
-                self.Map.addPlacemark(location.latitude, location.longitude, 'You', 'You', '/images/current.png');
+            var date = new Date();
+
+            $.post('/api/place', {state: 'just_reserved', latitude: location.latitude, longitude: location.longitude, lastUpdated: (date).toJSON()}, function (data) {
+                self.Map.addPlacemark(location.latitude, location.longitude, 'Your Place', 'Your Place', '/images/busy.png');
+            });
+        };
+
+        self.ShowNearestParkingPlace = function() {
+            var location = self.Map.getGeolocation();
+            $.ajax({
+                url: "/api/place/nearestfree",
+                type: 'GET',
+                data: {latitude: location.latitude, longitude: location.longitude},
+                context: document.body
+            }).done(function (data) {
+                self.Map.setCenter({latitude: data.latitude,longitude: data.longitude});
+                alert('Nearest Empty Place');
             });
         };
 
@@ -40,13 +55,14 @@
                 data: {latitude: location.latitude, longitude: location.longitude, radius: 500},
                 context: document.body
             }).done(function (data) {
-                self.Map.addPlacemark(location.latitude, location.longitude, 'You', 'You', '/images/current.png');
-            });
+                data.forEach(function(item){
+                    var date = new Date(item.lastUpdated);
+                    var content = item.state == 'free' ?'FREE: ' + date.getHours() +':'+date.getMinutes(): 'BUSY: ' + date.getHours() +':'+date.getMinutes();
+                    var img = item.state == 'free' ?'/images/free.png' : '/images/busy.png';
+                    self.Map.addPlacemark(item.latitude, item.longitude, content, content, img);
+                });
 
-            /*for (var i = 0; i < 5; i++)
-                self.Map.addPlacemark('53.88' + (i + 3) + '5' + '5'.toString(), 27.5445, 'UNKNOW', 'UNKNOW', '/images/unknown.png');*/
-            /*                }
-             });*/
+            });
         }
 
         return self;
