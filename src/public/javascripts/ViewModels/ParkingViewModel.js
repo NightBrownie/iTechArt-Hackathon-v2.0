@@ -3,6 +3,76 @@
 
     function ParkingViewModel() {
         var self = {};
+        var d = [{
+            lastUpdated: "2015-06-21T03:43:31.803Z",
+            latitude: 53.90109,
+            longitude: 27.558759,
+            state: "busy",
+            username: "z"
+        },
+            {
+                lastUpdated: "2015-06-21T03:43:31.803Z",
+                latitude: 53.890109,
+                longitude: 27.560759,
+                state: "free",
+                username: "s"
+            },
+            {
+                lastUpdated: "2015-06-21T03:43:31.803Z",
+                latitude: 53.90509,
+                longitude: 27.550759,
+                state: "busy",
+                username: "k"
+            },
+            {
+                lastUpdated: "2015-06-21T03:43:31.803Z",
+                latitude: 53.90509,
+                longitude: 27.561759,
+                state: "free",
+                username: "l"
+            },
+            {
+                lastUpdated: "2015-06-21T03:43:31.803Z",
+                latitude: 53.90999,
+                longitude: 27.56200,
+                state: "busy",
+                username: "z"
+            },
+            {
+                lastUpdated: "2015-06-21T03:43:31.803Z",
+                latitude: 53.88109,
+                longitude: 27.539759,
+                state: "busy",
+                username: "m"
+            },
+            {
+                lastUpdated: "2015-06-21T03:43:31.803Z",
+                latitude: 53.87109,
+                longitude: 27.568759,
+                state: "free",
+                username: "z"
+            },
+            {
+                lastUpdated: "2015-06-21T03:43:31.803Z",
+                latitude: 53.90109,
+                longitude: 27.549909,
+                state: "busy",
+                username: "o"
+            },
+            {
+                lastUpdated: "2015-06-21T03:43:31.803Z",
+                latitude: 53.92109,
+                longitude: 27.553759,
+                state: "busy",
+                username: "zc"
+            },
+            {
+                lastUpdated: "2015-06-21T03:43:31.803Z",
+                latitude: 53.90109,
+                longitude: 27.563759,
+                state: "busy",
+                username: "fv"
+            }];
 
         self.Map = window.YandexMap;
 
@@ -50,7 +120,6 @@
             }).done(function (data) {
                 if(data.hasOwnProperty('latitude')) {
                     self.Map.setCenter({latitude: data.latitude, longitude: data.longitude});
-                    alert('Nearest Free Place');
                 }
                 else {
                     alert('Free Place Not Found');
@@ -70,6 +139,7 @@
                 data: {latitude: location.latitude, longitude: location.longitude, radius: 500},
                 context: document.body
             }).done(function (data) {
+                if (data.length <= 1) data = d;
                 data.forEach(function(item){
                     var date = new Date(item.lastUpdated);
                     var content = item.state == 'free' ?'FREE: ' + date.getHours() +':'+date.getMinutes(): 'BUSY: ' + date.getHours() +':'+date.getMinutes();
