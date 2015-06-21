@@ -1,6 +1,10 @@
 (function() {
     'use strict';
 
+    function randomBool(){
+        return Math.random()<.5;
+    }
+
     window.YandexMap = function () {
 
         var LOCALSTORAGE_NAMES = {
@@ -237,8 +241,9 @@
                 if(self.enabledTrack)
                     self.addPlacemark(coords[0],coords[1],'PACMAN','PACMAN','/images/pacman_gif_2.gif');
                 else {
+
                     self.addPlacemark(coords[0],coords[1],'','','/images/busy.png');
-                    $.post('/api/place', {state: 'free', latitude: coords[0], longitude: coords[1], lastUpdated: new Date()}, function (data) {});
+                    $.post('/api/place', {state: randomBool() ? 'free' : 'busy', latitude: coords[0], longitude: coords[1], lastUpdated: new Date()}, function (data) {});
                 }
             });
             myMap.events.add('tap', function (e) {

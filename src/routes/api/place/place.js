@@ -62,7 +62,7 @@ router.post('/', auth(true), function(req, res, next) {
         return res.send(400);
     }
 
-    Place.remove({
+    /*Place.remove({
             'location.coordinates': {
                 $near: {
                     $geometry: {
@@ -77,7 +77,7 @@ router.post('/', auth(true), function(req, res, next) {
 
                 Place.remove({username: username},
                     function(err) {
-                        if (err) return res.send(500);
+                        if (err) return res.send(500);*/
 
                         var place = new Place();
                         place.username = username;
@@ -91,8 +91,8 @@ router.post('/', auth(true), function(req, res, next) {
 
                             res.end();
                         });
-                    });
-            });
+/*                    });
+            });*/
 
     
 });
