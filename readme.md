@@ -14,7 +14,7 @@ GET    /api/user/ {username: [String]}
 
     Place:
 
-POST    /api/place {state: 'just_reserver', latitude: -55.02, longitude: 43.2, lastUpdated: (new Date()).toJSON()}
+POST    /api/place {state: 'just_reserver', latitude: -55.02, longitude: 43.2, lastUpdated: new Date()}
     states: [
         'free',
         'busy',

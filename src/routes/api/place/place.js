@@ -53,7 +53,7 @@ router.post('/', auth(true), function(req, res, next) {
 
     var username = undefined;
 
-    if (state === 'just_reserver') {
+    if (state === 'just_reserved') {
         username = req.session.currentUser.username;
         state = 'busy';
     }

@@ -23,7 +23,12 @@
 
         self.TakePlace = function () {
             var location = self.Map.getGeolocation();
-            $.post('/api/place', function (data) {
+            $.post('/api/place', {
+                state: 'just_reserved',
+                latitude: location.latitude,
+                longitude: location.longitude,
+                lastUpdated: new Date()
+            }, function (data) {
                 self.Map.addPlacemark(location.latitude, location.longitude, 'You', 'You', '/images/current.png');
             });
         };

@@ -42,10 +42,10 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav pull-right">
                     <!-- ko with: AuthorizationViewModel -->
-                    <li><a data-bind="visible: !isUserLoggedIn(), click: ShowForm" class="btn">SIGN IN / SIGN UP</a></li>
+                    <li><a data-bind="visible: !isUserLoggedIn() && loginTabActive(), click: setRegisterActive" class="btn">REGISTER</a></li>
+                    <li><a data-bind="visible: !isUserLoggedIn() && !loginTabActive(), click: setLoginActive" class="btn">SIGN IN</a></li>
                     <li><a data-bind="visible: isUserLoggedIn(), click: LogOut" class="btn">LOG OUT</a></li>
                     <!-- /ko -->
-
                 </ul>
             </div><!--/.nav-collapse -->
         </div>
@@ -67,55 +67,15 @@
         </div>
     </section>
     <!-- /social links -->
-    <!-- ko if: AuthorizationViewModel.isAuthorizationViewModelEnabled-->
-    <div data-bind="template: {name: 'SignIn'}"></div>
-    <div data-bind="template: {name: 'SignUp'}"></div>
+    <!-- ko if: !AuthorizationViewModel.isUserLoggedIn() -->
+        <div data-bind="visible: AuthorizationViewModel.loginTabActive(), template: {name: 'SignIn'}"></div>
+        <div data-bind="visible: !AuthorizationViewModel.loginTabActive(), template: {name: 'SignUp'}"></div>
     <!-- /ko -->
 
-    <div data-bind="visible: AuthorizationViewModel.isUserLoggedIn, template: { name: 'ParkingMap'}"></div>
+    <div data-bind="visible: AuthorizationViewModel.isUserLoggedIn(), template: { name: 'ParkingMap'}"></div>
 
 
     <footer id="footer" class="top-space">
-
-        <div class="footer1">
-            <div class="container">
-                <div class="row">
-
-                    <div class="col-md-3 widget">
-                        <h3 class="widget-title">Contact</h3>
-                        <div class="widget-body">
-                            <p>
-                                +234 23 9873237<br>
-                                <a href="mailto:#">some.email@somewhere.com</a><br>
-                                <br>
-                                234 Hidden Pond Road, Ashland City, TN 37015
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3 widget">
-                        <h3 class="widget-title">Follow me</h3>
-                        <div class="widget-body">
-                            <p class="follow-me-icons">
-                                <a href=""><i class="fa fa-twitter fa-2"></i></a>
-                                <a href=""><i class="fa fa-dribbble fa-2"></i></a>
-                                <a href=""><i class="fa fa-github fa-2"></i></a>
-                                <a href=""><i class="fa fa-facebook fa-2"></i></a>
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="col-md-6 widget">
-                        <h3 class="widget-title">Text widget</h3>
-                        <div class="widget-body">
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Excepturi, dolores, quibusdam architecto voluptatem amet fugiat nesciunt placeat provident cumque accusamus itaque voluptate modi quidem dolore optio velit hic iusto vero praesentium repellat commodi ad id expedita cupiditate repellendus possimus unde?</p>
-                            <p>Eius consequatur nihil quibusdam! Laborum, rerum, quis, inventore ipsa autem repellat provident assumenda labore soluta minima alias temporibus facere distinctio quas adipisci nam sunt explicabo officia tenetur at ea quos doloribus dolorum voluptate reprehenderit architecto sint libero illo et hic.</p>
-                        </div>
-                    </div>
-
-                </div> <!-- /row of widgets -->
-            </div>
-        </div>
 
         <div class="footer2">
             <div class="container">
@@ -124,11 +84,11 @@
                     <div class="col-md-6 widget">
                         <div class="widget-body">
                             <p class="simplenav">
-                                <a href="#">Home</a> |
-                                <a href="about.html">About</a> |
-                                <a href="sidebar-right.html">Sidebar</a> |
-                                <a href="contact.html">Contact</a> |
-                                <b><a href="signup.html">Sign up</a></b>
+                                <a href="index.html">Home</a>
+                                <!-- ko if: !AuthorizationViewModel.isUserLoggedIn() && !AuthorizationViewModel.loginTabActive() -->
+                                |
+                                <b><a href="#" data-bind="click: AuthorizationViewModel.setLoginActive">Sign up</a></b>
+                                <!-- /ko -->
                             </p>
                         </div>
                     </div>
@@ -154,25 +114,15 @@
         <!-- ko with: AuthorizationViewModel -->
 
         <div class="container">
-
-            <ol class="breadcrumb">
-                <li><a href="index.html">Home</a></li>
-                <li class="active">User access</li>
-            </ol>
-
             <div class="row">
 
                 <!-- Article main content -->
-                <article class="col-xs-12 maincontent">
-                    <header class="page-header">
-                        <h1 class="page-title">Sign in</h1>
-                    </header>
-
+                <article>
                     <div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
                         <div class="panel panel-default">
                             <div class="panel-body">
                                 <h3 class="thin text-center">Sign in to your account</h3>
-                                <p class="text-center text-muted">Havent account? <a href="signup.html">Register</a></p>
+                                <p class="text-center text-muted">Haven't account? <a href="#" data-bind="click: setRegisterActive">Register</a></p>
                                 <hr>
 
                                 <form>
@@ -189,7 +139,7 @@
 
                                     <div class="row">
                                         <div class="col-lg-8">
-                                            <b><a href="">Forgot password?</a></b>
+                                            <b><a href="#">Forgot password?</a></b>
                                         </div>
                                         <div class="col-lg-4 text-right">
                                             <button class="btn btn-action" data-bind="click: logIn">Sign in</button>
@@ -214,35 +164,25 @@
         <!-- ko with: AuthorizationViewModel -->
         <!-- container -->
         <div class="container">
-
-            <ol class="breadcrumb">
-                <li><a href="index.html">Home</a></li>
-                <li class="active">Registration</li>
-            </ol>
-
             <div class="row">
 
                 <!-- Article main content -->
-                <article class="col-xs-12 maincontent">
-                    <header class="page-header">
-                        <h1 class="page-title">Registration</h1>
-                    </header>
-
+                <article class="maincontent">
                     <div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
                         <div class="panel panel-default">
                             <div class="panel-body">
                                 <h3 class="thin text-center">Register a new account</h3>
-                                <p class="text-center text-muted">Lorem ipsum dolor sit amet, <a href="signin.html">Login</a> adipisicing elit. Quo nulla quibusdam cum doloremque incidunt nemo sunt a tenetur omnis odio. </p>
+                                <p class="text-center text-muted">Lorem ipsum dolor sit amet, <a href="#" data-bind="click: setLoginActive">Login</a> adipisicing elit. Quo nulla quibusdam cum doloremque incidunt nemo sunt a tenetur omnis odio. </p>
                                 <hr>
 
                                 <form>
                                     <div class="top-margin">
                                         <label>First Name</label>
-                                        <input type="text" class="form-control" data-bind="value: firstName">
+                                        <input type="text" class="form-control">
                                     </div>
                                     <div class="top-margin">
                                         <label>Last Name</label>
-                                        <input type="text" class="form-control" data-bind="value: lastName">
+                                        <input type="text" class="form-control">
                                     </div>
                                     <div class="top-margin">
                                         <label>Email Address <span class="text-danger">*</span></label>
@@ -256,7 +196,7 @@
                                         </div>
                                         <div class="col-sm-6">
                                             <label>Confirm Password <span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control" data-bind="value: confirmPassword">
+                                            <input type="text" class="form-control">
                                         </div>
                                     </div>
 
@@ -265,8 +205,8 @@
                                     <div class="row">
                                         <div class="col-lg-8">
                                             <label class="checkbox">
-                                                <input type="checkbox">
-                                                I've read the <a href="page_terms.html">Terms and Conditions</a>
+                                                <input type="checkbox" />
+                                                I've read the <a href="#">Terms and Conditions</a>
                                             </label>
                                         </div>
                                         <div class="col-lg-4 text-right">
@@ -291,14 +231,14 @@
         <div class="container">
             <div class="row">
                 <!-- Article main content -->
-                <article class="col-xs-12 maincontent">
+                <article class="maincontent">
                     <header class="page-header">
                         <h1 class="page-title">ParkingMap</h1>
                     </header>
                     <div class="btn-group btn-group-sm col-lg-3" role="group" aria-label="...">
                         <button class="btn btn-action" data-bind="click: ParkingViewModel.TakePlace"><span class="glyphicon glyphicon-alert" aria-hidden="true"></span>Take Place</button>
-                        <button class="btn btn-danger" data-bind="click: ParkingViewModel.ShowForm">Place Tow Truck</button>
-                        <button class="btn btn-danger" data-bind="click: ParkingViewModel.getMyCoordinates">My Coordinates</button>
+                        <button class="btn btn-danger" data-bind="click: ParkingViewModel.ShowForm" style="margin-left: 10px;">Place Tow Truck</button>
+                        <button class="btn btn-danger" data-bind="click: ParkingViewModel.getMyCoordinates" style="margin-left: 10px;">My Coordinates</button>
                     </div>
                     <div class="col-lg-12" id="map"></div>
                 </article>
