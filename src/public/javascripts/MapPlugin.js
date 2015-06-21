@@ -167,10 +167,10 @@
                 pacman = newPlacemark;
 
             var coords = pacman.geometry.getCoordinates();
-            setTimeout(RemovePacman,200);
+            setTimeout(RemovePacman,400);
             function RemovePacman() {
                 myMap.geoObjects.remove(pacman);
-                coords[1] +=0.0005;
+                coords[1] +=0.0003;
                 pacman = AddPacman(coords[0],coords[1], '/images/pacman_gif_2.gif');
                 pacman();
             }
