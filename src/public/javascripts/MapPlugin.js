@@ -22,6 +22,9 @@
 
         var self = {};
 
+        self.enabledTrack;
+
+
         self.addPlacemark = function (width, length, hintContent, balloonContent, url) {
 
             var baloonCont = '';
@@ -29,10 +32,10 @@
                 hintContent: balloonContent
             }, {
                 iconImageHref: url || 'http://trololo.sto47.net/trololo.jpg',
-                iconImageSize: [17, 17],
+                iconImageSize: hintContent === 'PACMAN' ? ([35, 35]) : [15, 15],
                 iconImageOffset: [-15, -15]
             });
-            newPlacemark.events.add('click', function (e) {
+            newPlacemark.events.add('click, tap', function (e) {
                 e.stopPropagation();
 
                 var newPlacemark = e.get('target');
@@ -94,14 +97,25 @@
             return ymaps.geolocation;
         };
 
-        self.setCenter = function(location){
+        self.setCenter = function(location, roundCallback){
             myMap.setCenter([location.latitude, location.longitude]);
+            if(roundCallback){
+                var $map = $('#map');
+                var off = $map.offset();
+
+
+                var element = '<div class="map-circle">';
+                var $e = $(element);
+                $e.css('left', off.left + 555 - 204);
+                $e.css('top', off.top + 425 - 204);
+                $(window.document.body).append($e);
+            }
         };
 
 
         function getMenuContent(balloonContent) {
             return '<div id="placemarker-menu" class="btn-group-vertical" role="group">\
-<span>' + balloonContent + '</span>' + (balloonContent == 'You'? '' : '<button class="btn btn-success">make free</button> <button class="btn btn-danger">make busy</button>')+'</div>';
+<span>' + balloonContent + '</span>' + ((balloonContent == 'You' || balloonContent == 'PACMAN' )? '' : '<button class="btn btn-success">make free</button> <button class="btn btn-danger">make busy</button>')+'</div>';
         }
 
         self.setGetCoordsCallback = function (callback) {
@@ -119,16 +133,17 @@
                 if ($('#placemarker-menu').css('display') == 'block') {
                     $('#placemarker-menu').remove();
                 }
+                if ($('.map-circle').css('display') == 'block') {
+                    $('.map-circle').remove();
+                }
             });
 
             myMap.controls.add('smallZoomControl', {top: 5});
 
-            myMap.events.add('click', function (e) {
+            myMap.events.add('click, tap', function (e) {
                 var coords = e.get('coordPosition');
-
-                if (getCoordsCallback) {
-                    getCoordsCallback(coords);
-                }
+                if(self.enabledTrack)
+                self.addPlacemark(coords[0],coords[1],'PACMAN','PACMAN','/images/pacman.png')
             });
         }
 

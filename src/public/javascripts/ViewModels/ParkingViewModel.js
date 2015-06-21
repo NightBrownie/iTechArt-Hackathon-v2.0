@@ -14,10 +14,20 @@
             getPlaceMarks();
         };
 
+        self.ShowMarkers = function () {
+            getPlaceMarks();
+        };
+
+        self.isTrackPlacingEnabled = ko.observable(false);
+
+        self.Track = function () {
+            self.isTrackPlacingEnabled(!self.isTrackPlacingEnabled());
+            self.Map.enabledTrack = self.isTrackPlacingEnabled();
+        };
+
         self.getMyCoordinates = function () {
             var location = self.Map.getGeolocation();
-            self.Map.setCenter(location);
-            //self.Map.renderCircle(location);
+            self.Map.setCenter(location, true);
             self.Map.addPlacemark(location.latitude, location.longitude, 'You', 'You', '/images/current.png');
         };
 
@@ -25,7 +35,7 @@
             var location = self.Map.getGeolocation();
             var date = new Date();
 
-            $.post('/api/place', {state: 'just_reserved', latitude: location.latitude, longitude: location.longitude, lastUpdated: (date).toJSON()}, function (data) {
+            $.post('/api/place', {state: 'busy', latitude: location.latitude, longitude: location.longitude, lastUpdated: (date).toJSON()}, function (data) {
                 self.Map.addPlacemark(location.latitude, location.longitude, 'Your Place', 'Your Place', '/images/busy.png');
             });
         };
@@ -40,7 +50,10 @@
             }).done(function (data) {
                 if(data.hasOwnProperty('latitude')) {
                     self.Map.setCenter({latitude: data.latitude, longitude: data.longitude});
-                    alert('Nearest Empty Place');
+                    alert('Nearest Free Place');
+                }
+                else {
+                    alert('Free Place Not Found');
                 }
             });
         };
