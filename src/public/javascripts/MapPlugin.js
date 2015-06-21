@@ -22,7 +22,7 @@
 
         var self = {};
 
-        self.addPlacemark = function (width, length, hintContent, balloonContent, url/*, freeCallback, busyCallback*/) {
+        self.addPlacemark = function (width, length, hintContent, balloonContent, url) {
 
             var baloonCont = '';
             var newPlacemark = new ymaps.Placemark([width, length], {
@@ -36,7 +36,7 @@
                 e.stopPropagation();
 
                 var newPlacemark = e.get('target');
-                
+
                 if ($('#placemarker-menu').css('display') == 'block') {
                     $('#placemarker-menu').remove();
                 } else {
@@ -92,7 +92,12 @@
 
         self.getGeolocation = function () {
             return ymaps.geolocation;
-        }
+        };
+
+        self.setCenter = function(location){
+            myMap.setCenter([location.latitude, location.longitude]);
+        };
+
 
         function getMenuContent(balloonContent) {
             return '<div id="placemarker-menu" class="btn-group-vertical" role="group">\
@@ -133,20 +138,13 @@
         }
 
         function getDefaults() {
-            $.ajax({
-                dataType: 'json',
-                url: 'http://google.com',
-                success: function (data) {
-                    var data = {
-                        center: [53.88855, 27.5445],
-                        zoom: 15
-                    };
-                    /*                    data = JSON.parse(data);*/
-                    defaults.center = data.center;
-                    defaults.zoom = data.zoom;
-                }
-            });
-        }
+                var data = {
+                    center: [53.88855, 27.5445],
+                    zoom: 15
+                };
+                defaults.center = data.center;
+                defaults.zoom = data.zoom;
+            }
 
         function loadDefaults() {
             var defaultsFromJson = localStorage.getItem(LOCALSTORAGE_NAMES.DEFAULTS);
