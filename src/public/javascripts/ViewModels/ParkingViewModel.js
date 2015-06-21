@@ -38,8 +38,10 @@
                 data: {latitude: location.latitude, longitude: location.longitude},
                 context: document.body
             }).done(function (data) {
-                self.Map.setCenter({latitude: data.latitude,longitude: data.longitude});
-                alert('Nearest Empty Place');
+                if(data.hasOwnProperty('latitude')) {
+                    self.Map.setCenter({latitude: data.latitude, longitude: data.longitude});
+                    alert('Nearest Empty Place');
+                }
             });
         };
 
