@@ -167,7 +167,6 @@
             function RemovePacman() {
                 myMap.geoObjects.remove(pacman);
                 coords[1] +=0.0005;
-                coords[1] +=0.0005;
                 pacman = AddPacman(coords[0],coords[1], '/images/pacman_gif_2.gif');
                 pacman();
             }
@@ -236,9 +235,10 @@
             myMap.events.add('click', function (e) {
                 var coords = e.get('coordPosition');
                 if(self.enabledTrack)
-                self.addPlacemark(coords[0],coords[1],'PACMAN','PACMAN','/images/pacman_gif_2.gif');
+                    self.addPlacemark(coords[0],coords[1],'PACMAN','PACMAN','/images/pacman_gif_2.gif');
                 else {
                     self.addPlacemark(coords[0],coords[1],'','','/images/busy.png');
+                    $.post('/api/place', {state: 'free', latitude: coords[0], longitude: coords[1], lastUpdated: new Date()}, function (data) {});
                 }
             });
             myMap.events.add('tap', function (e) {
