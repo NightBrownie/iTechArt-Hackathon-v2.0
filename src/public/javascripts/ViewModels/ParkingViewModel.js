@@ -3,7 +3,7 @@
 
     function ParkingViewModel() {
         var self = {};
-        var d = [{
+        /*var d = [{
             lastUpdated: "2015-06-21T03:43:31.803Z",
             latitude: 53.90109,
             longitude: 27.558759,
@@ -72,7 +72,7 @@
                 longitude: 27.563759,
                 state: "busy",
                 username: "fv"
-            }];
+            }];*/
 
         self.Map = window.YandexMap;
 
@@ -105,7 +105,7 @@
             var location = self.Map.getGeolocation();
             var date = new Date();
 
-            $.post('/api/place', {state: 'busy', latitude: location.latitude, longitude: location.longitude, lastUpdated: (date).toJSON()}, function (data) {
+            $.post('/api/place', {state: 'just_reserved', latitude: location.latitude, longitude: location.longitude, lastUpdated: (date).toJSON()}, function (data) {
                 self.Map.addPlacemark(location.latitude, location.longitude, 'Your Place', 'Your Place', '/images/busy.png');
             });
         };
@@ -139,7 +139,7 @@
                 data: {latitude: location.latitude, longitude: location.longitude, radius: 500},
                 context: document.body
             }).done(function (data) {
-                if (data.length <= 1) data = d;
+                /*if (data.length <= 1) data = d;*/
                 data.forEach(function(item){
                     var date = new Date(item.lastUpdated);
                     var content = item.state == 'free' ?'FREE: ' + date.getHours() +':'+date.getMinutes(): 'BUSY: ' + date.getHours() +':'+date.getMinutes();
