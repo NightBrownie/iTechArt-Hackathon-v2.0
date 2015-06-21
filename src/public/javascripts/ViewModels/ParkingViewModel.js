@@ -8,24 +8,24 @@
 
         self.isParkingEnabled = ko.observable(false);
 
-        self.ShowForm = function(){
+        self.ShowForm = function () {
             self.Map.setGetCoordsCallback(addPlacemarkerCallback);
             self.isParkingEnabled(false);
             getPlaceMarks();
         };
-        self.TakePlace = function()
-        {
+
+        self.getMyCoordinates = function () {
             var location = self.Map.getGeolocation();
-            /*$.ajax({
-                dataType: 'json',
-                url: 'http://localhost:3000',
-                success: function (data) {
-                    var data = {
-                        center: [53.88855, 27.5445],
-                        zoom: 15
-                    };
-            self.Map.addPlacemark(location.latitude, location.longitude, 'You', 'You', '/images/current.png');}})*/
+            //self.Map.setCenter(location);
+            //self.Map.renderCircle(location);
             self.Map.addPlacemark(location.latitude, location.longitude, 'You', 'You', '/images/current.png');
+        };
+
+        self.TakePlace = function () {
+            var location = self.Map.getGeolocation();
+            $.post('/api/place', function (data) {
+                self.Map.addPlacemark(location.latitude, location.longitude, 'You', 'You', '/images/current.png');
+            });
         };
 
         function addPlacemarkerCallback() {
@@ -33,46 +33,20 @@
         }
 
         function getPlaceMarks() {
-           /* $.ajax({
-                dataType: 'json',
-                url: 'http://localhost:3000',
-                fail: function (data) {
-                    var data = {
-                        center: [53.88855, 27.5445],
-                        zoom: 15
-                    };
-                    *//*                    data = JSON.parse(data);*//*
-                    for(var i = 0; i<5; i++)
-                        self.Map.addPlacemark('53.88' + (i + 3) + '5' + '5'.toString(), 27.5445, i, 'Занято: '+ (i+1).toString() + i.toString() +':' + i.toString() + (i+1).toString());
-                },
-                always: function (data) {
-                    var data = {
-                        center: [53.88855, 27.5445],
-                        zoom: 15
-                    };
-                    *//*                    data = JSON.parse(data);*/
-                    for(var i = 0; i<5; i++)
-                        self.Map.addPlacemark('53.88' + (i + 3) + '5' + '5'.toString(), 27.5445, 'UNKNOW', 'UNKNOW', '/images/unknown.png');
-/*                }
-            });*/
-        }
+            var location = self.Map.getGeolocation();
+            $.ajax({
+                url: "/api/place",
+                type: 'GET',
+                data: {latitude: location.latitude, longitude: location.longitude, radius: 500},
+                context: document.body
+            }).done(function (data) {
+                self.Map.addPlacemark(location.latitude, location.longitude, 'You', 'You', '/images/current.png');
+            });
 
-        function freeCallback(e) {
-return function() {
-    var coords = e.get('position');
-    addNewPlacemark(coords[0], coords[1], 'busy')
-}
-        }
-
-        function busyCallback(e) {
-            return function() {
-                var coords = e.get('position');
-                //addNewPlacemark(coords[0], coords[1], 'free')
-            }
-        }
-
-        function addNewPlacemark(c1, c2, type) {
-            self.Map.addPlacemark(c1, c2, type, type + ': ',  freeCallback(), busyCallback());
+            /*for (var i = 0; i < 5; i++)
+                self.Map.addPlacemark('53.88' + (i + 3) + '5' + '5'.toString(), 27.5445, 'UNKNOW', 'UNKNOW', '/images/unknown.png');*/
+            /*                }
+             });*/
         }
 
         return self;
