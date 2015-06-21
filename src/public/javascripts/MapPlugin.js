@@ -29,7 +29,7 @@
                 hintContent: balloonContent
             }, {
                 iconImageHref: url || 'http://trololo.sto47.net/trololo.jpg',
-                iconImageSize: [10, 10],
+                iconImageSize: [17, 17],
                 iconImageOffset: [-15, -15]
             });
             newPlacemark.events.add('click', function (e) {
