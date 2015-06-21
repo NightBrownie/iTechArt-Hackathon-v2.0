@@ -101,17 +101,12 @@
 
         function getMenuContent(balloonContent) {
             return '<div id="placemarker-menu" class="btn-group-vertical" role="group">\
-                            <span>' + balloonContent + '</span>\
-                                <button class="btn btn-success">make free</button>\
-                                <button class="btn btn-danger">make busy</button>\
-                            </ul>\
-                        </div>';
+<span>' + balloonContent + '</span>' + (balloonContent == 'You'? '' : '<button class="btn btn-success">make free</button> <button class="btn btn-danger">make busy</button>')+'</div>';
         }
 
         self.setGetCoordsCallback = function (callback) {
             getCoordsCallback = callback;
         };
-
 
         function init() {
             myMap = new ymaps.Map("map", {
