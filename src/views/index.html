@@ -42,7 +42,8 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav pull-right">
                     <!-- ko with: AuthorizationViewModel -->
-                    <li><a data-bind="click: ShowForm" class="btn">SIGN IN / SIGN UP</a></li>
+                    <li><a data-bind="visible: !isUserLoggedIn(), click: ShowForm" class="btn">SIGN IN / SIGN UP</a></li>
+                    <li><a data-bind="visible: isUserLoggedIn(), click: LogOut" class="btn">LOG OUT</a></li>
                     <!-- /ko -->
 
                 </ul>
@@ -298,7 +299,7 @@
                         <button class="btn btn-action" data-bind="click: ParkingViewModel.TakePlace"><span class="glyphicon glyphicon-alert" aria-hidden="true"></span>Take Place</button>
                         <button class="btn btn-danger" data-bind="click: ParkingViewModel.ShowForm">Place Tow Truck</button>
                     </div>
-                    <div class="col-lg-12" id="map" style="height: 700px"></div>
+                    <div class="col-lg-12" id="map"></div>
                 </article>
 
             </div>

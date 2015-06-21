@@ -3,7 +3,7 @@
 
     function AuthorizationViewModel() {
         var self = {};
-
+        self.isUserLoggedIn = ko.observable(false);
         self.userName = ko.observable();
         self.password = ko.observable();
 
@@ -25,6 +25,7 @@
             };
             $.post("/api/user/login", data, function(returnedData) {
                 var test = returnedData;
+                self.isUserLoggedIn(true);
             });
         };
 
@@ -35,11 +36,20 @@
             };
             $.post("/api/user/register", data, function (returnedData) {
                 var test = returnedData;
+                self.isUserLoggedIn(true);
+            });
+        };
+
+        self.LogOut = function () {
+            $.post("/api/user/logout", function (returnedData) {
+                var test = returnedData;
+                self.isUserLoggedIn(false);
             });
         };
 
         return self;
     }
 
+    
     window.ViewModels.AuthorizationViewModel = AuthorizationViewModel;
 })();
