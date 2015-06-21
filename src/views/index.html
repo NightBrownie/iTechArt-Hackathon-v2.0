@@ -67,11 +67,12 @@
         </div>
     </section>
     <!-- /social links -->
-    <!-- ko if: AuthorizationViewModel.isAuthorizationViewModelEnabled -->
-    <div data-bind="template: { name: 'SignIn'}"></div>
-    <div data-bind="template: { name: 'SignUp'}"></div>
+    <!-- ko if: AuthorizationViewModel.isAuthorizationViewModelEnabled-->
+    <div data-bind="template: {name: 'SignIn'}"></div>
+    <div data-bind="template: {name: 'SignUp'}"></div>
     <!-- /ko -->
-    <div data-bind="template: { name: 'ParkingMap'}"></div>
+
+    <div data-bind="visible: AuthorizationViewModel.isUserLoggedIn, template: { name: 'ParkingMap'}"></div>
 
 
     <footer id="footer" class="top-space">
